@@ -14,6 +14,7 @@ const CardStyle = {
     // console.log(project);
     return (
       <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+     
         <div
           style={CardStyle}
          // onMouseEnter={() => setIsFlipped((prev) => !prev)}

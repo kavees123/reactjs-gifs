@@ -4,35 +4,42 @@ import Fade from 'react-reveal/Fade';
 import classes from './App.module.css';
 import Cards from '../src/Cards/Cards';
 import ScrollButton from './Scrollbutton/ScrollButton';
+import axios from 'axios';
+
 function App() {
-  const [gifs, setGifLinks] = useState([])
-  const [rating,setrating] = useState("g");
+  const [gifs, setGifLinks] = React.useState([])
+  const [rating,setrating] = React.useState("g");
   const [rating_change,setrating_change] = useState(false);
-  const [limit,setlimit] = useState(3);
+  const [limit,setlimit] = React.useState(3);
   const [limit_change,setlimit_change] = useState(false);
-  const [showbutton, setshowbutton]= useState(true);
-   useEffect(() => {
+  const [showbutton, setshowbutton]= React.useState(true);
+ 
+   React.useEffect(() => {
     //console.log("the rating is " + rating)
-          fetchdata();
-          if(limit >= 50){
-            setshowbutton(false);
-          }
+    fetchdata();
+    if(limit >= 50){
+      setshowbutton(false);
+    }
+   
+         
     }, [rating_change,limit_change])
    
    
-  
-
-   const  fetchdata = () => {
+    async function fetchdata ()  {
       let url = "https://api.giphy.com/v1/stickers/trending?api_key=KOcz4hSduhvMzZH77D08FFxotEhYrfvn&limit="+limit+"&rating="+rating;
 
-      fetch(url)
-          .then(response => response.json())
+      axios.get(url)
+          .then(response => response.data)
           .then(gifLinks => {
-     //       console.log(gifLinks.data);
+            console.log(gifLinks.data);
              setGifLinks(gifLinks.data )
-            
+     
           })
+        
     }
+
+    
+   
 
  
     const  ratingchange = (element) => {
@@ -54,7 +61,13 @@ function App() {
     }
   return (
     <div style={{textAlign: "center"}}>
-
+      <p style={{display:'none'}}>Limit: {limit}</p>
+      <p style={{display:'none'}}>Showbutton: {showbutton}</p>
+      <p style={{display:'none'}}>Rating: {rating}</p>
+     
+    
+      
+   
  {/*  <div >
         <input type="text" value={limit} onChange={(e) =>setlimit(e.target.value) } />
       </div> */}
@@ -76,23 +89,26 @@ function App() {
   </select> */}
   <br></br>
 {/*   <button onClick={change_rating}>Change Rating</button> */}
-      {gifs.map(gif => (
+ <>
+      {
+      gifs ? gifs.map(gif => (
         <Fade top key={gif.id}>
-        <div>
-          
-           
             {/* <img
               key={gif.id}
               src={gif.images.fixed_width_small.url}
               alt={gif.title}
             /> */}
+           
             <Cards title={gif.title} id={gif.id} src={gif.images.fixed_width_small.url} rating={gif.rating} username={gif.username} ></Cards>
-            </div>
+          
             </Fade>
-          ))}
+          )) : <p>…Loading</p>
+          }
+   </>    
      { showbutton? <button className={classes.button} onClick={change_limit}>Show More</button> : null}
      <ScrollButton></ScrollButton>
     </div>
+
   );
 }
 
