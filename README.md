@@ -5,6 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Open the terminal and clone the project
 1) Run "npm install" in the extracted folder
 2) Run "npm start" to view the project
+3) To test the project run "npm test"
 ## Available Scripts
 
 In the project directory, you can run:
